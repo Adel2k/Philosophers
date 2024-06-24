@@ -15,6 +15,7 @@ typedef struct s_data
 	int	sleeping_t;
 	int die_t;
 	int round;
+	pthread_mutex_t	mutex;
 } t_data;
 
 
