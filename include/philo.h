@@ -1,4 +1,4 @@
-#ifndef PHILO_H
+# ifndef PHILO_H
 # define PHILO_H
 
 #include <stdio.h>
@@ -28,7 +28,7 @@ typedef struct s_philo
 	int				dead;
 	int				eaten;
 	int				index;
-	size_t			last_meal;
+	int				last_meal;
 	pthread_t		thread_id;
 	t_data			*data;
 	pthread_mutex_t *left;
@@ -37,7 +37,7 @@ typedef struct s_philo
 } t_philo;
 
 
-void    	p_error(char *str);
+int    	p_error(char *str);
 int			ft_atoi(char *str);
 void		validation(int ac, char **av, t_data *data);
 long long	get_time(void);

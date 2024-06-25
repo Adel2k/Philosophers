@@ -1,9 +1,9 @@
 #include "philo.h"
 
-void    p_error(char *str)
+int	p_error(char *str)
 {
     printf("%s\n", str);
-    exit(EXIT_FAILURE);
+    return (-1);
 }
 void	check(char *str)
 {
@@ -50,6 +50,6 @@ int	ft_atoi(char *str)
 void	pmessage(char *str, t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->message);
-	printf("%d %s\n", philo->index, str);
+	printf("%lld %d %s\n", get_time(), philo->index, str);
 	pthread_mutex_unlock(&philo->data->message);
 }

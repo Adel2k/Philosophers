@@ -1,10 +1,20 @@
 #include "philo.h"
 
+
+int	is_dead(t_philo *philos)
+{
+	if (get_time() > philos->last_meal + philos->data->die_t)
+	{
+		pmessage("is dead", philos);
+		return (1);
+	}
+	return (0);
+}
 void    *eat(t_philo *philos)
 {
 	if (philos->index + 1 % 2 == 0)
         usleep(philos->data->eating_t - 10);
-	while (philos->dead != 1 && philos->eaten != 1)
+	while (is_dead(philos) != 1 && philos->eaten != 1)
     {
         pthread_mutex_lock(philos->right);
         pmessage("has taken a fork", philos);
@@ -72,9 +82,10 @@ void    philos(t_data *data)
     pthread_mutex_init(&data->message, NULL);
     forks(data);
     philos_init(data);
-    while(i < data->philos)
+    while (i < data->philos)
     {
+		printf("aaaaaaaa\n");
         pthread_join(data->philo[i].thread_id, NULL);
-        i++;
+		i++;
     }
 }
