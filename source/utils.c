@@ -47,9 +47,9 @@ int	ft_atoi(char *str)
 	return (numb);
 }
 
-void	pmessage(char *str, t_data *data)
+void	pmessage(char *str, t_philo *philo)
 {
-	pthread_mutex_lock(&data->message);
-	printf("%d %s\n", data->philo->index, str);
-	pthread_mutex_unlock(&data->message);
+	pthread_mutex_lock(&philo->data->message);
+	printf("%d %s\n", philo->index, str);
+	pthread_mutex_unlock(&philo->data->message);
 }

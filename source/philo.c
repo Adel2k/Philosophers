@@ -3,26 +3,26 @@
 void    *eat(t_philo *philos)
 {
 	if (philos->index + 1 % 2 == 0)
-        usleep(500);
+        usleep(philos->data->eating_t - 10);
 	while (philos->dead != 1 && philos->eaten != 1)
     {
         pthread_mutex_lock(philos->right);
-        pmessage("has taken a fork", philos->data);
+        pmessage("has taken a fork", philos);
         pthread_mutex_lock(philos->left);
         if (philos->data->philos == 1)
         {
             pthread_mutex_unlock(philos->left);
             p_error("Lonely philo will starve:(");
         }
-        pmessage("has taken a fork", philos->data);
-    	pmessage("is eating", philos->data);
+        pmessage("has taken a fork", philos);
+    	pmessage("is eating", philos);
     	usleep(philos->data->sleeping_t);
         pthread_mutex_unlock(philos->right);
         pthread_mutex_unlock(philos->left);
         get_last_eat_time(philos);
-		pmessage("is sleeping", philos->data);
+		pmessage("is sleeping", philos);
 		usleep(philos->data->sleeping_t);
-		pmessage("is thinking", philos->data);
+		pmessage("is thinking", philos);
     }
     return (NULL);
 }

@@ -43,7 +43,7 @@ void		validation(int ac, char **av, t_data *data);
 long long	get_time(void);
 void		get_last_eat_time(t_philo *philos);
 void		philos(t_data *data);
-void		pmessage(char *str, t_data *data);
+void		pmessage(char *str, t_philo *philo);
 void		*eat(t_philo *philos);
 void		check(char *str);
 
