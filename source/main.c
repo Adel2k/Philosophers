@@ -12,4 +12,5 @@ int main(int ac, char **av)
     }
     validation(ac, av, data);
     philos(data);
+	free(data);
 }
