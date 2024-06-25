@@ -30,6 +30,7 @@ void    *eat(t_philo *philos)
         {
             pthread_mutex_unlock(philos->left);
             p_error("Lonely philo will starve:(");
+			philos->dead = 1;
         }
         pmessage("has taken a fork", philos);
     	pmessage("is eating", philos);
@@ -84,14 +85,14 @@ void    philos(t_data *data)
     int i;
 
     i = 0;
-    get_time();
     data->philo = malloc(sizeof(t_philo) * data->philos);
+    get_time();
     pthread_mutex_init(&data->message, NULL);
     forks(data);
     philos_init(data);
 	while (1)
 	{
-		if (is_dead(data) == 1)
+		if (is_dead(data) == 1 || data->philo->dead == 1)
 			break;
 	}
     while (i < data->philos)

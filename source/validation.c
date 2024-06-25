@@ -3,7 +3,10 @@
 void	validation(int ac, char **av, t_data *data)
 {
     if (ac != 5 && ac != 6)
+	{
 	    p_error("Wrong arguments!");
+		return ;
+	}
     data->philos = ft_atoi(av[1]);
     data->die_t = ft_atoi(av[2]);
     data->eating_t = ft_atoi(av[3]);
