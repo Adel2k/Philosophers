@@ -13,6 +13,7 @@ typedef struct s_philo t_philo;
 
 typedef struct s_data
 {
+	int				*is_dead;
     int				philos;
 	int 			eating_t;
 	int				sleeping_t;

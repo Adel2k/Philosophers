@@ -7,13 +7,19 @@ int	is_dead(t_data *data)
 	i = 0;
 	while (i < data->philos)
 	{
+        pthread_mutex_lock(&data->philo[i].last_meal_mutex);
 		if (get_time() > data->philo[i].last_meal + data->die_t)
 		{
-
-			pmessage("is dead", data->philo);
-			data->philo->dead = 1;
+            pthread_mutex_lock(&data->philo[i].die_mutex);
+			data->philo[i].dead = 1;
+            pthread_mutex_unlock(&data->philo[i].die_mutex);
+            pthread_mutex_lock(&data->message);
+            printf("%lld %d is dead\n", get_time(), data->philo[i].index);
+            pthread_mutex_unlock(&data->message);
+            pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 			return (1);
 		}
+        pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 		i++;
 	}
 	return (0);
@@ -70,7 +76,9 @@ void    philos_init(t_data *data)
         pthread_mutex_init(&data->philo[i].die_mutex, NULL);
         data->philo[i].dead = 0;        
         data->philo[i].eaten = 0;
+        pthread_mutex_lock(&data->philo[i].last_meal_mutex);
         data->philo[i].last_meal = 0;
+        pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
         data->philo[i].index = i;
         data->philo[i].data = data;
         get_last_eat_time(&data->philo[i]);
@@ -79,9 +87,11 @@ void    philos_init(t_data *data)
         else
             data->philo[i].right = &data->forks[i - 1];
         data->philo[i].left = &data->forks[i];
-        pthread_create(&data->philo[i].thread_id, NULL, (void *)&eat, &data->philo[i]);
         i++;
     }
+	i = -1;
+    while(++i < data->philos)
+        pthread_create(&data->philo[i].thread_id, NULL, (void *)&eat, &data->philo[i]);
 }
 void    philos(t_data *data)
 {
@@ -89,7 +99,6 @@ void    philos(t_data *data)
 
     i = 0;
     data->philo = malloc(sizeof(t_philo) * data->philos);
-    get_time();
     pthread_mutex_init(&data->message, NULL);
     forks(data);
     philos_init(data);
