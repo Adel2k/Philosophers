@@ -34,6 +34,7 @@ typedef struct s_philo
 	pthread_mutex_t *left;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	last_meal_mutex;
+	pthread_mutex_t	die_mutex;
 } t_philo;
 
 

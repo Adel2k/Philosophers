@@ -49,6 +49,8 @@ int	ft_atoi(char *str)
 
 void	pmessage(char *str, t_philo *philo)
 {
+	if (philo->dead)
+	
 	pthread_mutex_lock(&philo->data->message);
 	printf("%lld %d %s\n", get_time(), philo->index, str);
 	pthread_mutex_unlock(&philo->data->message);

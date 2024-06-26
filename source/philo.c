@@ -9,6 +9,7 @@ int	is_dead(t_data *data)
 	{
 		if (get_time() > data->philo[i].last_meal + data->die_t)
 		{
+
 			pmessage("is dead", data->philo);
 			data->philo->dead = 1;
 			return (1);
@@ -65,6 +66,8 @@ void    philos_init(t_data *data)
     i = 0;
     while (i < data->philos)
     {
+        pthread_mutex_init(&data->philo[i].last_meal_mutex, NULL);
+        pthread_mutex_init(&data->philo[i].die_mutex, NULL);
         data->philo[i].dead = 0;        
         data->philo[i].eaten = 0;
         data->philo[i].last_meal = 0;
@@ -100,6 +103,8 @@ void    philos(t_data *data)
         pthread_join(data->philo[i].thread_id, NULL);
 		pthread_mutex_destroy(&data->message);
 		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
+		pthread_mutex_destroy(&data->philo[i].die_mutex);
 		i++;
     }
 	free(data->philo);
