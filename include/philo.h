@@ -13,13 +13,14 @@ typedef struct s_philo t_philo;
 
 typedef struct s_data
 {
-	int				*is_dead;
+	int				is_dead;
     int				philos;
 	int 			eating_t;
 	int				sleeping_t;
 	int				die_t;
 	int				round;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	is_dead_mutex;
 	pthread_mutex_t message;
 	t_philo			*philo;
 } t_data;
@@ -48,6 +49,8 @@ void		philos(t_data *data);
 void		pmessage(char *str, t_philo *philo);
 void		*eat(t_philo *philos);
 void		check(char *str);
+void	adels_usleep(t_philo *philo, long long time);
+int	is_died(t_philo *philo);
 
 
 

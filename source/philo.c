@@ -13,9 +13,12 @@ int	is_dead(t_data *data)
             pthread_mutex_lock(&data->philo[i].die_mutex);
 			data->philo[i].dead = 1;
             pthread_mutex_unlock(&data->philo[i].die_mutex);
+			pthread_mutex_lock(&data->is_dead_mutex);
+			data->is_dead = 1;
             pthread_mutex_lock(&data->message);
-            printf("%lld %d is dead\n", get_time(), data->philo[i].index);
+            printf("%lld %d is dead\n", get_time(), data->philo[i].index + 1);
             pthread_mutex_unlock(&data->message);
+			pthread_mutex_unlock(&data->is_dead_mutex);
             pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 			return (1);
 		}
@@ -26,9 +29,9 @@ int	is_dead(t_data *data)
 }
 void    *eat(t_philo *philos)
 {
-	if (philos->index + 1 % 2 == 0)
+	if ((philos->index + 1) % 2 == 0)
         usleep(philos->data->eating_t - 10);
-	while (is_dead(philos->data) != 1)
+	while (is_died(philos) != 1)
     {
         pthread_mutex_lock(philos->right);
         pmessage("has taken a fork", philos);
@@ -41,12 +44,12 @@ void    *eat(t_philo *philos)
         }
         pmessage("has taken a fork", philos);
     	pmessage("is eating", philos);
-    	usleep(philos->data->sleeping_t);
+    	adels_usleep(philos, philos->data->eating_t);
         pthread_mutex_unlock(philos->right);
         pthread_mutex_unlock(philos->left);
         get_last_eat_time(philos);
 		pmessage("is sleeping", philos);
-		usleep(philos->data->sleeping_t);
+		adels_usleep(philos, philos->data->sleeping_t);
 		pmessage("is thinking", philos);
     }
     return (NULL);
@@ -100,11 +103,13 @@ void    philos(t_data *data)
     i = 0;
     data->philo = malloc(sizeof(t_philo) * data->philos);
     pthread_mutex_init(&data->message, NULL);
+	pthread_mutex_init(&data->is_dead_mutex, NULL);
+	data->is_dead = 0;
     forks(data);
     philos_init(data);
 	while (1)
 	{
-		if (is_dead(data) == 1 || data->philo->dead == 1)
+		if (is_dead(data) == 1)
 			break;
 	}
     while (i < data->philos)

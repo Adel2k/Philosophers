@@ -59,3 +59,26 @@ void	pmessage(char *str, t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->die_mutex);	
 }
+
+void	adels_usleep(t_philo *philo, long long time)
+{
+	long long	t2;
+
+	t2 = get_time();
+	while (get_time() - t2 <= time)
+	{
+		if (philo->data->is_dead == 1)
+			break ;
+		usleep(500);
+	}
+}
+
+int	is_died(t_philo *philo)
+{
+	int	is_died;
+
+	pthread_mutex_lock(&philo->data->is_dead_mutex);
+	is_died = philo->data->is_dead;
+	pthread_mutex_unlock(&philo->data->is_dead_mutex);
+	return (is_died);
+}
