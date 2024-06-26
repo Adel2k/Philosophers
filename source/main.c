@@ -11,6 +11,6 @@ int main(int ac, char **av)
         return (1);
     }
     validation(ac, av, data);
-    philos(data);
+    creating_philos(data);
 	free(data);
 }

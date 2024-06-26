@@ -1,55 +1,28 @@
 #include "philo.h"
 
-int	is_dead(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->philos)
-	{
-        pthread_mutex_lock(&data->philo[i].last_meal_mutex);
-		if (get_time() > data->philo[i].last_meal + data->die_t)
-		{
-            pthread_mutex_lock(&data->philo[i].die_mutex);
-			data->philo[i].dead = 1;
-            pthread_mutex_unlock(&data->philo[i].die_mutex);
-			pthread_mutex_lock(&data->is_dead_mutex);
-			data->is_dead = 1;
-            pthread_mutex_lock(&data->message);
-            printf("%lld %d is dead\n", get_time(), data->philo[i].index + 1);
-            pthread_mutex_unlock(&data->message);
-			pthread_mutex_unlock(&data->is_dead_mutex);
-            pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
-			return (1);
-		}
-        pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
-		i++;
-	}
-	return (0);
-}
 void    *eat(t_philo *philos)
 {
-	if ((philos->index + 1) % 2 == 0)
+	if (philos->index % 2 == 0)
         usleep(philos->data->eating_t - 10);
 	while (is_died(philos) != 1)
     {
-        pthread_mutex_lock(philos->right);
-        pmessage("has taken a fork", philos);
         pthread_mutex_lock(philos->left);
+        pmessage("has taken a fork", philos);
         if (philos->data->philos == 1)
         {
             pthread_mutex_unlock(philos->left);
-            p_error("Lonely philo will starve:(");
 			philos->dead = 1;
+			return (NULL);
         }
+        pthread_mutex_lock(philos->right);
         pmessage("has taken a fork", philos);
     	pmessage("is eating", philos);
-    	adels_usleep(philos, philos->data->eating_t);
-        pthread_mutex_unlock(philos->right);
+    	usleep_alt(philos, philos->data->eating_t);
         pthread_mutex_unlock(philos->left);
-        get_last_eat_time(philos);
+        pthread_mutex_unlock(philos->right);
 		pmessage("is sleeping", philos);
-		adels_usleep(philos, philos->data->sleeping_t);
+        get_last_eat_time(philos);
+		usleep_alt(philos, philos->data->sleeping_t);
 		pmessage("is thinking", philos);
     }
     return (NULL);
@@ -96,7 +69,7 @@ void    philos_init(t_data *data)
     while(++i < data->philos)
         pthread_create(&data->philo[i].thread_id, NULL, (void *)&eat, &data->philo[i]);
 }
-void    philos(t_data *data)
+void    creating_philos(t_data *data)
 {
     int i;
 
@@ -109,7 +82,7 @@ void    philos(t_data *data)
     philos_init(data);
 	while (1)
 	{
-		if (is_dead(data) == 1)
+		if (check_if_dead(data) == 1)
 			break;
 	}
     while (i < data->philos)

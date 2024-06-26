@@ -12,7 +12,7 @@ BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 INCLUDE = -I$(INC_DIR) 
 CC = cc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=thread $(INCLUDE) 
+CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=address $(INCLUDE) 
 
 %.o:	%.c $(INCLUDE) 
 	$(CC) $(CFLAGS) -c $< -o $@
