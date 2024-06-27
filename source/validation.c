@@ -8,7 +8,7 @@ void	check(char *str)
 	while (str[i])
 	{
 		if (!(str[i] <= '9' && str[i] >= '0'))
-				p_error("Enter just number!");
+			p_error("Enter just number!");
 		i++;
 	}
 }
@@ -22,7 +22,6 @@ int	ft_atoi(char *str)
 	i = 0;
 	numb = 0;
 	sign = 1;
-
 	check(str);
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
@@ -38,23 +37,25 @@ int	ft_atoi(char *str)
 		numb = (numb * 10) + (str[i++] - '0');
 	numb = numb * sign;
 	if (numb > INT_MAX || numb < INT_MIN)
-			p_error("Error");
+		p_error("Error");
 	return (numb);
 }
+
 void	validation(int ac, char **av, t_data *data)
 {
-    if (ac != 5 && ac != 6)
+	if (ac != 5 && ac != 6)
 	{
-	    p_error("Wrong arguments!");
+		p_error("Wrong arguments!");
 		return ;
 	}
-    data->philos = ft_atoi(av[1]);
-    data->die_t = ft_atoi(av[2]);
-    data->eating_t = ft_atoi(av[3]);
-    data->sleeping_t = ft_atoi(av[4]);
+	data->philos = ft_atoi(av[1]);
+	data->die_t = ft_atoi(av[2]);
+	data->eating_t = ft_atoi(av[3]);
+	data->sleeping_t = ft_atoi(av[4]);
 	data->round = 1;
 	if (av[5])
-    	data->round = ft_atoi(av[5]);
-    if (data->die_t <= 0 || data->eating_t <= 0 || data->philos <= 0 || data->round <= 0 || data->sleeping_t <= 0)
-        p_error("Wrong numbers!");
+		data->round = ft_atoi(av[5]);
+	if (data->die_t <= 0 || data->eating_t <= 0 || data->philos <= 0
+		|| data->round <= 0 || data->sleeping_t <= 0)
+		p_error("Wrong numbers!");
 }
