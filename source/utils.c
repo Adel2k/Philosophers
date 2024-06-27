@@ -19,6 +19,24 @@ void	pmessage(char *str, t_philo *philo)
 	pthread_mutex_unlock(&philo->die_mutex);	
 }
 
+void	free_destroy(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->philos)
+    {
+		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
+		pthread_mutex_destroy(&data->philo[i].die_mutex);
+		i++;
+    }
+	pthread_mutex_destroy(&data->message);
+	pthread_mutex_destroy(&data->is_dead_mutex);
+	free(data->philo);
+	free(data->forks);
+}
+
 void	usleep_alt(t_philo *philo, long long time)
 {
 	long long	t2;

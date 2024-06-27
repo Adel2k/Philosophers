@@ -51,7 +51,7 @@ void		*eat(t_philo *philos);
 void		check(char *str);
 void	usleep_alt(t_philo *philo, long long time);
 int	is_died(t_philo *philo);
-
+void	free_destroy(t_data *data);
 int	check_if_dead(t_data *data);
 
 # endif

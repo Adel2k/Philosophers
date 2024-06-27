@@ -73,7 +73,7 @@ void    creating_philos(t_data *data)
 {
     int i;
 
-    i = 0;
+    i = -1;
     data->philo = malloc(sizeof(t_philo) * data->philos);
     pthread_mutex_init(&data->message, NULL);
 	pthread_mutex_init(&data->is_dead_mutex, NULL);
@@ -85,15 +85,9 @@ void    creating_philos(t_data *data)
 		if (check_if_dead(data) == 1)
 			break;
 	}
-    while (i < data->philos)
-    {
+    while (i++ < data->philos)
+	{
         pthread_join(data->philo[i].thread_id, NULL);
-		pthread_mutex_destroy(&data->message);
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
-		pthread_mutex_destroy(&data->philo[i].die_mutex);
-		i++;
-    }
-	free(data->philo);
-	free(data->forks);
+	}
+	free_destroy(data);
 }
